@@ -59,10 +59,15 @@ sudo apt-get update
 sudo apt-get install -y wget qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6core5compat6-dev
 if [ ! -f "$DEB_PATH" ]; then
   echo "PC Service deb not found locally, downloading official release..."
-  mkdir -p "$(dirname "$DEB_PATH")"
-  wget -O "$DEB_PATH" "$PC_SERVICE_DEB_URL"
+  tmp_deb=/tmp/XRoboToolkit-PC-Service_1.0.0.0_arm64.deb
+  wget -O "$tmp_deb" "$PC_SERVICE_DEB_URL"
+  sudo mkdir -p "$(dirname "$DEB_PATH")"
+  sudo install -m 0644 "$tmp_deb" "$DEB_PATH"
 fi
 sudo dpkg -i "$DEB_PATH"
+if [ -f /opt/apps/roboticsservice.tar ]; then
+  sudo tar --wildcards -xvf /opt/apps/roboticsservice.tar -C /opt/apps 'roboticsservice/lib/libicu*'
+fi
 cd /opt/apps/roboticsservice
 sudo tee runService.sh > /dev/null <<'RUNSERVICE'
 #!/bin/bash
