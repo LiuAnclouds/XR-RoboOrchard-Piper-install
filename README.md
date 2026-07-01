@@ -32,6 +32,16 @@ bash 04_install_piper_sdk.sh
 bash 05_verify_install.sh
 ```
 
+
+To mount the projects under another container directory instead of `/moonxkj`:
+
+```bash
+CONTAINER_ROOT=/workspace bash 02_run_container.sh
+CONTAINER_ROOT=/workspace bash 03_install_roboorchard_xr.sh
+CONTAINER_ROOT=/workspace bash 04_install_piper_sdk.sh
+CONTAINER_ROOT=/workspace bash 05_verify_install.sh
+```
+
 ## Notes
 
 - Run commands on the robot host.

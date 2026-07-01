@@ -4,6 +4,7 @@ set -euo pipefail
 DOCKER_NAME=${DOCKER_NAME:-holobrain}
 IMAGE_NAME=${IMAGE_NAME:-holobrain-dev:s100}
 SOP_DIR=${SOP_DIR:-$HOME/SOP}
+CONTAINER_ROOT=${CONTAINER_ROOT:-/moonxkj}
 
 ROBO_REPO=${ROBO_REPO:-https://github.com/HorizonRobotics/RoboOrchard.git}
 PYBIND_REPO=${PYBIND_REPO:-https://github.com/XR-Robotics/XRoboToolkit-PC-Service-Pybind.git}
@@ -49,10 +50,11 @@ docker run -itd \
   -e ROS2_INSTALL_PATH=/opt/ros/humble/ \
   -e no_proxy="localhost,127.0.0.1" \
   -v /dev:/dev \
-  -v "$SOP_DIR/RoboOrchard:/moonxkj/RoboOrchard" \
-  -v "$SOP_DIR/XRoboToolkit-PC-Service-Pybind:/moonxkj/XRoboToolkit-PC-Service-Pybind" \
-  -v "$SOP_DIR/piper_sdk:/moonxkj/piper_sdk" \
-  -w /moonxkj \
+  -e CONTAINER_ROOT="$CONTAINER_ROOT" \
+  -v "$SOP_DIR/RoboOrchard:$CONTAINER_ROOT/RoboOrchard" \
+  -v "$SOP_DIR/XRoboToolkit-PC-Service-Pybind:$CONTAINER_ROOT/XRoboToolkit-PC-Service-Pybind" \
+  -v "$SOP_DIR/piper_sdk:$CONTAINER_ROOT/piper_sdk" \
+  -w "$CONTAINER_ROOT" \
   "$IMAGE_NAME" \
   bash
 

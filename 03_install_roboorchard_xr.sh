@@ -3,7 +3,9 @@ set -euo pipefail
 
 DOCKER_NAME=${DOCKER_NAME:-holobrain}
 SOP_DIR=${SOP_DIR:-$HOME/SOP}
-ROBO_PATH=/moonxkj/RoboOrchard
+CONTAINER_ROOT=${CONTAINER_ROOT:-/moonxkj}
+ROBO_PATH=${ROBO_PATH:-$CONTAINER_ROOT/RoboOrchard}
+PYBIND_PATH=${PYBIND_PATH:-$CONTAINER_ROOT/XRoboToolkit-PC-Service-Pybind}
 DEB_PATH=${DEB_PATH:-$SOP_DIR/XRoboToolkit-PC-Service-Pybind/tmp/XRoboToolkit-PC-Service/XRoboToolkit-PC-Service_1.0.0.0_arm64.deb}
 PC_SERVICE_DEB_URL=${PC_SERVICE_DEB_URL:-https://github.com/XR-Robotics/XRoboToolkit-PC-Service/releases/download/v1.0.0/XRoboToolkit-PC-Service_1.0.0.0_arm64.deb}
 ICU73_URL=${ICU73_URL:-https://download.qt.io/development_releases/prebuilt/icu/prebuilt/73.2/icu-linux-g++-Debian11.6-aarch64.7z}
@@ -35,10 +37,13 @@ echo "[note] piper_sdk is installed separately by bash 04_install_piper_sdk.sh"
 echo "[2/4] Install XRoboToolkit pybind with pybind_patch.cpp"
 if [ ! -f "$PATCH_CPP" ]; then echo "pybind patch not found: $PATCH_CPP" >&2; exit 1; fi
 docker cp "$PATCH_CPP" "$DOCKER_NAME:/tmp/pybind_patch.cpp"
-docker exec -i "$DOCKER_NAME" bash <<'BASH'
+docker exec -i \
+  -e ROBO_PATH="$ROBO_PATH" \
+  -e PYBIND_PATH="$PYBIND_PATH" \
+  "$DOCKER_NAME" bash <<'BASH'
 set -e
-source /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate
-cd /moonxkj/XRoboToolkit-PC-Service-Pybind
+source "$ROBO_PATH/venv/roboorchard-venv/bin/activate"
+cd "$PYBIND_PATH"
 
 # Follow the official XRoboToolkit-PC-Service-Pybind Orin setup flow first.
 bash setup_orin.sh

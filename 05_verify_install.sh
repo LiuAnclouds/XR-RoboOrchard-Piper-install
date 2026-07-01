@@ -3,6 +3,10 @@ set -u
 
 DOCKER_NAME=${DOCKER_NAME:-holobrain}
 SOP_DIR=${SOP_DIR:-$HOME/SOP}
+CONTAINER_ROOT=${CONTAINER_ROOT:-/moonxkj}
+ROBO_PATH=${ROBO_PATH:-$CONTAINER_ROOT/RoboOrchard}
+PYBIND_PATH=${PYBIND_PATH:-$CONTAINER_ROOT/XRoboToolkit-PC-Service-Pybind}
+PIPER_PATH=${PIPER_PATH:-$CONTAINER_ROOT/piper_sdk}
 FAILED=0
 
 ok() { echo "[OK] $*"; }
@@ -26,17 +30,17 @@ check_container() {
 
 check_roboorchard() {
   section "1. RoboOrchard + ROS2"
-  docker exec -i "$DOCKER_NAME" bash <<'BASH'
+  docker exec -i -e ROBO_PATH="$ROBO_PATH" "$DOCKER_NAME" bash <<'BASH'
 set -e
-if [ ! -d /moonxkj/RoboOrchard ]; then
-  echo "[FAIL] /moonxkj/RoboOrchard is missing"
+if [ ! -d "$ROBO_PATH" ]; then
+  echo "[FAIL] $ROBO_PATH is missing"
   exit 10
 fi
-if [ ! -f /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate ]; then
+if [ ! -f "$ROBO_PATH/venv/roboorchard-venv/bin/activate" ]; then
   echo "[FAIL] RoboOrchard venv is missing. Run: bash 03_install_roboorchard_xr.sh"
   exit 11
 fi
-source /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate
+source "$ROBO_PATH/venv/roboorchard-venv/bin/activate"
 python - <<'PY'
 from importlib import metadata
 for pkg in ('robo_orchard_core', 'robo_orchard_lab'):
@@ -45,12 +49,12 @@ for pkg in ('robo_orchard_core', 'robo_orchard_lab'):
 import robo_orchard_core
 print('[OK] robo_orchard_core import OK')
 PY
-if [ ! -f /moonxkj/RoboOrchard/ros2_package/install/setup.bash ]; then
+if [ ! -f "$ROBO_PATH/ros2_package/install/setup.bash" ]; then
   echo "[FAIL] RoboOrchard ROS2 install/setup.bash is missing. Run: bash 03_install_roboorchard_xr.sh"
   exit 12
 fi
 source /opt/ros/humble/setup.bash
-source /moonxkj/RoboOrchard/ros2_package/install/setup.bash
+source "$ROBO_PATH/ros2_package/install/setup.bash"
 pkg_list=$(mktemp)
 ros2 pkg list > "$pkg_list"
 missing=0
@@ -67,7 +71,7 @@ for pkg in \
     missing=1
   fi
 done
-if [ -d /moonxkj/RoboOrchard/ros2_package/install/robo_orchard_piper_ros2 ]; then
+if [ -d "$ROBO_PATH/ros2_package/install/robo_orchard_piper_ros2" ]; then
   echo "[OK] ROS2 package installed: robo_orchard_piper_ros2"
 else
   echo "[FAIL] ROS2 package install dir missing: robo_orchard_piper_ros2"
@@ -86,13 +90,13 @@ BASH
 
 check_xr_pybind() {
   section "2. XRoboToolkit PC Service Pybind"
-  docker exec -i "$DOCKER_NAME" bash <<'BASH'
+  docker exec -i -e ROBO_PATH="$ROBO_PATH" -e PYBIND_PATH="$PYBIND_PATH" "$DOCKER_NAME" bash <<'BASH'
 set -e
-if [ ! -d /moonxkj/XRoboToolkit-PC-Service-Pybind ]; then
-  echo "[FAIL] /moonxkj/XRoboToolkit-PC-Service-Pybind is missing"
+if [ ! -d "$PYBIND_PATH" ]; then
+  echo "[FAIL] $PYBIND_PATH is missing"
   exit 20
 fi
-source /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate
+source "$ROBO_PATH/venv/roboorchard-venv/bin/activate"
 cd /tmp
 python - <<'PY'
 import xrobotoolkit_sdk as xrt
@@ -112,13 +116,13 @@ BASH
 
 check_piper_sdk() {
   section "3. piper_sdk"
-  docker exec -i "$DOCKER_NAME" bash <<'BASH'
+  docker exec -i -e ROBO_PATH="$ROBO_PATH" -e PIPER_PATH="$PIPER_PATH" "$DOCKER_NAME" bash <<'BASH'
 set -e
-if [ ! -d /moonxkj/piper_sdk ]; then
-  echo "[FAIL] /moonxkj/piper_sdk is missing"
+if [ ! -d "$PIPER_PATH" ]; then
+  echo "[FAIL] $PIPER_PATH is missing"
   exit 30
 fi
-source /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate
+source "$ROBO_PATH/venv/roboorchard-venv/bin/activate"
 cd /tmp
 python - <<'PY'
 from piper_sdk import C_PiperInterface_V2
