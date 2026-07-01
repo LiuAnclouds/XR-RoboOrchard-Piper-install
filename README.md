@@ -15,7 +15,7 @@ cd deploy
 ```bash
 bash build_holobrain_image.sh
 bash run_holobrain_container.sh
-bash install_all.sh
+bash install_main.sh
 bash install_piper_sdk.sh
 ```
 
@@ -24,7 +24,7 @@ If you do not need Torch in the Docker image:
 ```bash
 INSTALL_TORCH=0 bash build_holobrain_image.sh
 bash run_holobrain_container.sh
-bash install_all.sh
+bash install_main.sh
 bash install_piper_sdk.sh
 ```
 

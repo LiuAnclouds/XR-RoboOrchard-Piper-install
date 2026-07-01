@@ -13,7 +13,7 @@ XR-HoloBrain-Piper-install/
 ??? Dockerfile.holobrain
 ??? build_holobrain_image.sh
 ??? run_holobrain_container.sh
-??? install_all.sh
+??? install_main.sh
 ??? install_piper_sdk.sh
 ??? start.sh
 ??? check.sh
@@ -36,7 +36,7 @@ cd deploy
 ```bash
 bash build_holobrain_image.sh
 bash run_holobrain_container.sh
-bash install_all.sh
+bash install_main.sh
 bash install_piper_sdk.sh
 # Optional after environment setup:
 # bash start.sh
