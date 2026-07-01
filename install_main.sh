@@ -18,7 +18,7 @@ if [ ! -d "$ROBO_PATH/.git" ]; then echo "RoboOrchard source is not mounted at $
 python3 -m venv $ROBO_PATH/venv/roboorchard-venv || true
 source $ROBO_PATH/venv/roboorchard-venv/bin/activate
 python -m pip install --upgrade pip wheel
-python -m pip install "setuptools<82" "empy==3.3.4"
+python -m pip install "setuptools<82" "empy==3.3.4" catkin_pkg lark
 cd $ROBO_PATH
 pip install -e python/robo_orchard_core || true
 pip install -e python/robo_orchard_schemas || true
