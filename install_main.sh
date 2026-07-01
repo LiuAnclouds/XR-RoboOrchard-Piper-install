@@ -5,6 +5,7 @@ DOCKER_NAME=${DOCKER_NAME:-holobrain}
 SOP_DIR=${SOP_DIR:-$HOME/SOP}
 ROBO_PATH=/moonxkj/RoboOrchard
 DEB_PATH=${DEB_PATH:-$SOP_DIR/XRoboToolkit-PC-Service-Pybind/tmp/XRoboToolkit-PC-Service/XRoboToolkit-PC-Service_1.0.0.0_arm64.deb}
+PC_SERVICE_DEB_URL=${PC_SERVICE_DEB_URL:-https://github.com/XR-Robotics/XRoboToolkit-PC-Service/releases/download/v1.0.0/XRoboToolkit-PC-Service_1.0.0.0_arm64.deb}
 RIGHT_READY=${RIGHT_READY:-"[-0.108, 0.096, -1.026, 0.174, 1.077, -0.045, 0.0]"}
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 PATCH_CPP=${PATCH_CPP:-$SCRIPT_DIR/patches/pybind_patch.cpp}
@@ -54,9 +55,13 @@ PY
 BASH
 
 echo "[3/4] Install host PC Service and patch runService.sh"
-if [ ! -f "$DEB_PATH" ]; then echo "PC Service deb not found: $DEB_PATH" >&2; exit 1; fi
 sudo apt-get update
-sudo apt-get install -y qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6core5compat6-dev
+sudo apt-get install -y wget qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6core5compat6-dev
+if [ ! -f "$DEB_PATH" ]; then
+  echo "PC Service deb not found locally, downloading official release..."
+  mkdir -p "$(dirname "$DEB_PATH")"
+  wget -O "$DEB_PATH" "$PC_SERVICE_DEB_URL"
+fi
 sudo dpkg -i "$DEB_PATH"
 cd /opt/apps/roboticsservice
 sudo tee runService.sh > /dev/null <<'RUNSERVICE'

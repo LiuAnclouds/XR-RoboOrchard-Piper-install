@@ -136,12 +136,12 @@ BASH
 check_pc_service() {
   section "4. Host PC Service"
   if [ ! -x /opt/apps/roboticsservice/RoboticsServiceProcess ]; then
-    warn "PC Service executable is missing: /opt/apps/roboticsservice/RoboticsServiceProcess"
-    warn "If needed, run: bash install_main.sh"
+    fail "PC Service executable is missing: /opt/apps/roboticsservice/RoboticsServiceProcess"
+    echo "[FAIL] Run: bash install_main.sh"
     return 0
   fi
   if [ ! -x /opt/apps/roboticsservice/runService.sh ]; then
-    warn "PC Service runService.sh is missing or not executable"
+    fail "PC Service runService.sh is missing or not executable"
     return 0
   fi
   cd /opt/apps/roboticsservice || return 0
