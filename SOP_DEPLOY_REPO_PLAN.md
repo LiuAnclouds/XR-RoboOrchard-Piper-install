@@ -15,7 +15,6 @@ XR-RoboOrchard-Piper-install/
 ??? run_holobrain_container.sh
 ??? install_main.sh
 ??? install_piper_sdk.sh
-??? install_sim_deps.sh        # optional simulation deps
 ??? start.sh
 ??? check.sh
 ??? README.md
@@ -88,7 +87,3 @@ It replaces:
 ```text
 XRoboToolkit-PC-Service-Pybind/bindings/py_bindings.cpp
 ```
-
-## Optional simulation dependencies
-
-`install_sim_deps.sh` installs MuJoCo/Meshcat/Placo only when simulation is needed. These are intentionally not part of `Dockerfile.holobrain` because `placo` can fail to build on aarch64 if pip does not resolve a wheel.

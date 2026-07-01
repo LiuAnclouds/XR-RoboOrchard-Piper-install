@@ -34,6 +34,11 @@ docker exec -i "$DOCKER_NAME" bash <<'BASH'
 set -e
 source /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate
 cd /moonxkj/XRoboToolkit-PC-Service-Pybind
+
+# Follow the official XRoboToolkit-PC-Service-Pybind Orin setup flow first.
+bash setup_orin.sh
+
+# Then apply our full pybind replacement and rebuild the Python extension.
 cp /tmp/pybind_patch.cpp bindings/py_bindings.cpp
 export LD_LIBRARY_PATH=$PWD/lib/aarch64:$PWD/lib:$LD_LIBRARY_PATH
 pip uninstall -y xrobotoolkit_sdk || true

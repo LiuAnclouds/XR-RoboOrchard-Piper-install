@@ -28,17 +28,6 @@ bash install_main.sh
 bash install_piper_sdk.sh
 ```
 
-
-## Optional Simulation Dependencies
-
-Only install these if you need MuJoCo/Meshcat/Placo simulation tests:
-
-```bash
-bash install_sim_deps.sh
-```
-
-These packages are not installed in the Dockerfile because `placo` can fail to build on aarch64 when pip does not find a compatible wheel.
-
 ## Notes
 
 - Run all commands on the S100 host.
