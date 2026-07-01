@@ -69,9 +69,13 @@ import pydantic
 print('[OK] robo_orchard_core import OK')
 print('[OK] ROS runtime Python deps import OK')
 PY
+if [ ! -x "$ROBO_PATH/venv/roboorchard-venv/bin/colcon" ]; then
+  echo "[FAIL] venv colcon is missing. Run: bash 03_install_roboorchard_xr.sh"
+  exit 12
+fi
 if [ ! -f "$ROBO_PATH/ros2_package/install/setup.bash" ]; then
   echo "[FAIL] RoboOrchard ROS2 install/setup.bash is missing. Run: bash 03_install_roboorchard_xr.sh"
-  exit 12
+  exit 13
 fi
 source /opt/ros/humble/setup.bash
 source "$ROBO_PATH/ros2_package/install/setup.bash"
