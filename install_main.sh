@@ -12,6 +12,8 @@ PATCH_CPP=${PATCH_CPP:-$SCRIPT_DIR/patches/pybind_patch.cpp}
 echo "[1/4] Install RoboOrchard in Docker"
 docker exec -i "$DOCKER_NAME" bash <<BASH
 set -e
+git config --global --add safe.directory '*'
+python3 -m pip install --upgrade pip
 if [ ! -d "$ROBO_PATH/.git" ]; then echo "RoboOrchard source is not mounted at $ROBO_PATH" >&2; exit 1; fi
 python3 -m venv $ROBO_PATH/venv/roboorchard-venv || true
 source $ROBO_PATH/venv/roboorchard-venv/bin/activate

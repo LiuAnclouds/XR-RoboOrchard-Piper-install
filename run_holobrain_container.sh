@@ -15,6 +15,9 @@ if [ ! -d "$SOP_DIR/RoboOrchard/.git" ]; then
   git clone "$ROBO_REPO" "$SOP_DIR/RoboOrchard"
 fi
 
+cd "$SOP_DIR/RoboOrchard"
+git submodule update --init --recursive
+
 if [ ! -d "$SOP_DIR/XRoboToolkit-PC-Service-Pybind/.git" ]; then
   rm -rf "$SOP_DIR/XRoboToolkit-PC-Service-Pybind"
   git clone "$PYBIND_REPO" "$SOP_DIR/XRoboToolkit-PC-Service-Pybind"
