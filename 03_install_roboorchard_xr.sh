@@ -30,7 +30,7 @@ source /opt/ros/humble/setup.bash
 colcon build --symlink-install
 BASH
 
-echo "[note] piper_sdk is installed separately by bash install_piper_sdk.sh"
+echo "[note] piper_sdk is installed separately by bash 04_install_piper_sdk.sh"
 
 echo "[2/4] Install XRoboToolkit pybind with pybind_patch.cpp"
 if [ ! -f "$PATCH_CPP" ]; then echo "pybind patch not found: $PATCH_CPP" >&2; exit 1; fi
@@ -130,4 +130,4 @@ else
   echo "RIGHT_READY is not present in launch.yaml, skip patch."
 fi
 
-echo "Install complete. Next: bash install_piper_sdk.sh"
+echo "Install complete. Next: bash 04_install_piper_sdk.sh"

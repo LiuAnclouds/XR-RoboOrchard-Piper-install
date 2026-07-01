@@ -11,18 +11,17 @@ https://github.com/LiuAnclouds/XR-RoboOrchard-Piper-install.git
 ```text
 XR-RoboOrchard-Piper-install/
 ??? Dockerfile.holobrain
-??? build_holobrain_image.sh
-??? run_holobrain_container.sh
-??? install_main.sh
-??? install_piper_sdk.sh
-??? start.sh
-??? check.sh
+??? 01_build_image.sh
+??? 02_run_container.sh
+??? 03_install_roboorchard_xr.sh
+??? 04_install_piper_sdk.sh
+??? 05_verify_install.sh
 ??? README.md
 ??? patches/
     ??? pybind_patch.cpp
 ```
 
-## Clone command on S100
+## Clone command on robot host
 
 ```bash
 mkdir -p ~/SOP
@@ -34,16 +33,14 @@ cd deploy
 ## Install order
 
 ```bash
-bash build_holobrain_image.sh
-bash run_holobrain_container.sh
-bash install_main.sh
-bash install_piper_sdk.sh
-# Optional after environment setup:
-# bash start.sh
-# bash check.sh
+bash 01_build_image.sh
+bash 02_run_container.sh
+bash 03_install_roboorchard_xr.sh
+bash 04_install_piper_sdk.sh
+bash 05_verify_install.sh
 ```
 
-## Upstream repositories cloned by run_holobrain_container.sh
+## Upstream repositories cloned by 02_run_container.sh
 
 ```text
 https://github.com/HorizonRobotics/RoboOrchard.git
@@ -71,7 +68,7 @@ https://github.com/agilexrobotics/piper_sdk.git
 Use CPU-only PyTorch wheels. Do not pull NVIDIA/CUDA packages.
 
 ```bash
-INSTALL_TORCH=0 bash build_holobrain_image.sh  # optional skip
+INSTALL_TORCH=0 bash 01_build_image.sh  # optional skip
 ```
 
 ## pybind patch

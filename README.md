@@ -1,44 +1,39 @@
 # XR RoboOrchard Piper Install
 
-## 1. Clone
+## Install
 
 ```bash
 mkdir -p ~/SOP
 cd ~/SOP
 
-git clone https://github.com/LiuAnclouds/XR-RoboOrchard-Piper-install.git deploy
+git clone git@github.com:LiuAnclouds/XR-RoboOrchard-Piper-install.git deploy
 cd deploy
+
+bash 01_build_image.sh
+bash 02_run_container.sh
+bash 03_install_roboorchard_xr.sh
+bash 04_install_piper_sdk.sh
+bash 05_verify_install.sh
 ```
 
-## 2. Install Environment
+If GitHub SSH is not configured, clone with HTTPS instead:
 
 ```bash
-bash build_holobrain_image.sh
-bash run_holobrain_container.sh
-bash install_main.sh
-bash install_piper_sdk.sh
+git clone https://github.com/LiuAnclouds/XR-RoboOrchard-Piper-install.git deploy
 ```
 
 If you do not need Torch in the Docker image:
 
 ```bash
-INSTALL_TORCH=0 bash build_holobrain_image.sh
-bash run_holobrain_container.sh
-bash install_main.sh
-bash install_piper_sdk.sh
-```
-
-
-## 3. Verify Environment
-
-```bash
-bash verify_env.sh
+INSTALL_TORCH=0 bash 01_build_image.sh
+bash 02_run_container.sh
+bash 03_install_roboorchard_xr.sh
+bash 04_install_piper_sdk.sh
+bash 05_verify_install.sh
 ```
 
 ## Notes
 
-- Run all commands on the S100 host.
-- This README only covers environment setup.
-- Starting PC Service or HoloBrain control is handled separately after installation.
-- Default workspace path is `~/SOP`. Override with `SOP_DIR=/path/to/SOP` if needed.
-- PC Service ICU73 is installed from the Qt official prebuilt ICU package; no local `roboticsservice.tar` is required.
+- Run commands on the robot host.
+- Default workspace path is `~/SOP`.
+- This repository only installs and verifies the environment.

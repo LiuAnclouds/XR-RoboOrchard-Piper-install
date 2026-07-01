@@ -19,7 +19,7 @@ check_container() {
   if docker ps --format '{{.Names}}' | grep -qx "$DOCKER_NAME"; then
     ok "Docker container '$DOCKER_NAME' is running"
   else
-    fail "Docker container '$DOCKER_NAME' is not running. Run: bash run_holobrain_container.sh"
+    fail "Docker container '$DOCKER_NAME' is not running. Run: bash 02_run_container.sh"
     return 1
   fi
 }
@@ -33,7 +33,7 @@ if [ ! -d /moonxkj/RoboOrchard ]; then
   exit 10
 fi
 if [ ! -f /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate ]; then
-  echo "[FAIL] RoboOrchard venv is missing. Run: bash install_main.sh"
+  echo "[FAIL] RoboOrchard venv is missing. Run: bash 03_install_roboorchard_xr.sh"
   exit 11
 fi
 source /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate
@@ -46,7 +46,7 @@ import robo_orchard_core
 print('[OK] robo_orchard_core import OK')
 PY
 if [ ! -f /moonxkj/RoboOrchard/ros2_package/install/setup.bash ]; then
-  echo "[FAIL] RoboOrchard ROS2 install/setup.bash is missing. Run: bash install_main.sh"
+  echo "[FAIL] RoboOrchard ROS2 install/setup.bash is missing. Run: bash 03_install_roboorchard_xr.sh"
   exit 12
 fi
 source /opt/ros/humble/setup.bash
@@ -104,7 +104,7 @@ PY
 BASH
   local rc=$?
   if [ $rc -ne 0 ]; then
-    fail "XRoboToolkit pybind environment is incomplete. Run: bash install_main.sh"
+    fail "XRoboToolkit pybind environment is incomplete. Run: bash 03_install_roboorchard_xr.sh"
   else
     ok "XRoboToolkit pybind environment is complete"
   fi
@@ -127,7 +127,7 @@ PY
 BASH
   local rc=$?
   if [ $rc -ne 0 ]; then
-    fail "piper_sdk environment is incomplete. Run: bash install_piper_sdk.sh"
+    fail "piper_sdk environment is incomplete. Run: bash 04_install_piper_sdk.sh"
   else
     ok "piper_sdk environment is complete"
   fi
@@ -137,7 +137,7 @@ check_pc_service() {
   section "4. Host PC Service"
   if [ ! -x /opt/apps/roboticsservice/RoboticsServiceProcess ]; then
     fail "PC Service executable is missing: /opt/apps/roboticsservice/RoboticsServiceProcess"
-    echo "[FAIL] Run: bash install_main.sh"
+    echo "[FAIL] Run: bash 03_install_roboorchard_xr.sh"
     return 0
   fi
   if [ ! -x /opt/apps/roboticsservice/runService.sh ]; then
