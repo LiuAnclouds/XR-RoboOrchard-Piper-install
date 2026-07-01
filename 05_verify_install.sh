@@ -83,6 +83,13 @@ if [ ! -f "$ROBO_PATH/ros2_package/install/setup.bash" ]; then
 fi
 source /opt/ros/humble/setup.bash
 source "$ROBO_PATH/ros2_package/install/setup.bash"
+python - <<'PY'
+import robo_orchard_teleop_ros2.bridge.pico.node
+import robo_orchard_piper_ros2
+import rosbridge_server
+import rosbridge_library
+print('[OK] ROS launch-time Python modules import OK')
+PY
 pkg_list=$(mktemp)
 ros2 pkg list > "$pkg_list"
 missing=0
