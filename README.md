@@ -56,6 +56,9 @@ ROS_DOMAIN_ID=2
 
 ## Notes
 
+- The image is built with RoboOrchard native `projects/HoloBrain/dev/build.sh`.
+- RoboOrchard is installed with its native `make dev-env`, `make install-editable`, `make ros2-dev-env`, and `make build` flow.
+
 - Run commands on the robot host.
 - Default workspace path is `~/SOP`.
 - This repository only installs and verifies the environment.

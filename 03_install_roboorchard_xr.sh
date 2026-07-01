@@ -25,21 +25,23 @@ export PATH="$HOME/.local/bin:$PATH"
 echo "[1/4] Install RoboOrchard in Docker"
 docker exec -i "$DOCKER_NAME" bash <<BASH
 set -e
-git config --global --add safe.directory '*'
-python3 -m pip install --upgrade pip
 if [ ! -d "$ROBO_PATH/.git" ]; then echo "RoboOrchard source is not mounted at $ROBO_PATH" >&2; exit 1; fi
-python3 -m venv $ROBO_PATH/venv/roboorchard-venv || true
-source $ROBO_PATH/venv/roboorchard-venv/bin/activate
+git config --global --add safe.directory '*'
+cd "$ROBO_PATH"
+git submodule update --init --recursive
+python3 -m pip install --upgrade pip
+python3 -m venv venv/roboorchard-venv || true
+source venv/roboorchard-venv/bin/activate
 python -m pip install --upgrade pip wheel
-python -m pip install "setuptools<82" "empy==3.3.4" catkin_pkg lark netifaces pydantic tornado pymongo cbor2 ikpy colcon-common-extensions
-cd $ROBO_PATH
-pip install -e python/robo_orchard_core || true
-pip install -e python/robo_orchard_schemas || true
-pip install -e python/robo_orchard_lab || true
-cd $ROBO_PATH/ros2_package
+make dev-env
+make install-editable
+pip cache purge || true
+make ros2-dev-env
+cd "$ROBO_PATH/ros2_package"
 rm -rf build install log
 source /opt/ros/humble/setup.bash
-"$ROBO_PATH/venv/roboorchard-venv/bin/colcon" build --symlink-install --merge-install --install-base install --build-base build --cmake-args -DPYTHON_EXECUTABLE=$ROBO_PATH/venv/roboorchard-venv/bin/python3 -DPython3_EXECUTABLE=$ROBO_PATH/venv/roboorchard-venv/bin/python3
+source "$ROBO_PATH/venv/roboorchard-venv/bin/activate"
+make build
 BASH
 
 echo "[note] piper_sdk is installed separately by bash 04_install_piper_sdk.sh"
