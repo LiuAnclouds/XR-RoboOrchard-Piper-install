@@ -121,15 +121,8 @@ fi
 source /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate
 cd /tmp
 python - <<'PY'
-from pathlib import Path
 from piper_sdk import C_PiperInterface_V2
-urdf = Path('/moonxkj/piper_sdk/assets/urdf/piper_no_gripper_description.urdf')
 print('[OK] piper_sdk import OK')
-if urdf.exists():
-    print('[OK] piper URDF found:', urdf)
-else:
-    print('[FAIL] piper URDF missing:', urdf)
-    raise SystemExit(1)
 PY
 BASH
   local rc=$?

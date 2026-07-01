@@ -2,16 +2,10 @@
 set -euo pipefail
 DOCKER_NAME=${DOCKER_NAME:-holobrain}
 PIPER_PATH=${PIPER_PATH:-/moonxkj/piper_sdk}
-PIPER_ROS_REPO=${PIPER_ROS_REPO:-https://github.com/agilexrobotics/piper_ros.git}
-PIPER_ROS_ZIP_URL=${PIPER_ROS_ZIP_URL:-https://github.com/agilexrobotics/piper_ros/archive/refs/heads/master.zip}
-PIPER_URDF_NAME=${PIPER_URDF_NAME:-piper_no_gripper_description.urdf}
 
 # piper_sdk is intentionally installed separately from the Docker image.
 docker exec -i \
   -e PIPER_PATH="$PIPER_PATH" \
-  -e PIPER_ROS_REPO="$PIPER_ROS_REPO" \
-  -e PIPER_ROS_ZIP_URL="$PIPER_ROS_ZIP_URL" \
-  -e PIPER_URDF_NAME="$PIPER_URDF_NAME" \
   "$DOCKER_NAME" bash <<'BASH'
 set -e
 if [ ! -d "$PIPER_PATH" ]; then
@@ -22,54 +16,9 @@ source /moonxkj/RoboOrchard/venv/roboorchard-venv/bin/activate
 cd "$PIPER_PATH"
 pip uninstall -y piper_sdk piper-sdk || true
 pip install -e .
-
-mkdir -p "$PIPER_PATH/assets/urdf" "$PIPER_PATH/assets/meshes" /tmp/piper_assets
-rm -rf /tmp/piper_assets/piper_ros /tmp/piper_assets/piper_ros_zip
-if ! git clone --depth 1 "$PIPER_ROS_REPO" /tmp/piper_assets/piper_ros; then
-  echo "git clone piper_ros failed, trying GitHub zip..."
-  mkdir -p /tmp/piper_assets/piper_ros_zip
-  if command -v curl >/dev/null 2>&1; then
-    curl -L --retry 3 -o /tmp/piper_assets/piper_ros.zip "$PIPER_ROS_ZIP_URL"
-  else
-    wget -O /tmp/piper_assets/piper_ros.zip "$PIPER_ROS_ZIP_URL"
-  fi
-  python - <<'PY'
-from pathlib import Path
-import zipfile
-zip_path = Path('/tmp/piper_assets/piper_ros.zip')
-out = Path('/tmp/piper_assets/piper_ros_zip')
-with zipfile.ZipFile(zip_path) as archive:
-    archive.extractall(out)
-roots = [p for p in out.iterdir() if p.is_dir()]
-if not roots:
-    raise SystemExit('piper_ros zip has no root directory')
-Path('/tmp/piper_assets/piper_ros').symlink_to(roots[0], target_is_directory=True)
-PY
-fi
-if [ ! -d /tmp/piper_assets/piper_ros ]; then
-  echo "piper_ros assets source is missing" >&2
-  exit 2
-fi
-
-urdf_src=$(find /tmp/piper_assets/piper_ros -type f -name "$PIPER_URDF_NAME" | head -1)
-if [ -z "$urdf_src" ]; then
-  echo "URDF not found in piper_ros: $PIPER_URDF_NAME" >&2
-  exit 2
-fi
-cp "$urdf_src" "$PIPER_PATH/assets/urdf/$PIPER_URDF_NAME"
-
-mesh_dir=$(find /tmp/piper_assets/piper_ros -type d -path '*/piper_description/meshes' | head -1)
-if [ -n "$mesh_dir" ]; then
-  cp -a "$mesh_dir/." "$PIPER_PATH/assets/meshes/"
-fi
-
+cd /tmp
 python - <<'PY'
-from pathlib import Path
 from piper_sdk import C_PiperInterface_V2
-urdf = Path('/moonxkj/piper_sdk/assets/urdf/piper_no_gripper_description.urdf')
 print('piper_sdk import OK')
-print('piper URDF:', urdf, 'exists=', urdf.exists())
-if not urdf.exists():
-    raise SystemExit(1)
 PY
 BASH
