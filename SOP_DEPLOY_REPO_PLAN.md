@@ -3,13 +3,13 @@
 Repository:
 
 ```text
-https://github.com/LiuAnclouds/XR-HoloBrain-Piper-install.git
+https://github.com/LiuAnclouds/XR-RoboOrchard-Piper-install.git
 ```
 
 ## Final files
 
 ```text
-XR-HoloBrain-Piper-install/
+XR-RoboOrchard-Piper-install/
 ??? Dockerfile.holobrain
 ??? build_holobrain_image.sh
 ??? run_holobrain_container.sh
@@ -27,7 +27,7 @@ XR-HoloBrain-Piper-install/
 ```bash
 mkdir -p ~/SOP
 cd ~/SOP
-git clone https://github.com/LiuAnclouds/XR-HoloBrain-Piper-install.git deploy
+git clone https://github.com/LiuAnclouds/XR-RoboOrchard-Piper-install.git deploy
 cd deploy
 ```
 

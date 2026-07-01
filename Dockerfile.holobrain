@@ -44,7 +44,7 @@ RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3
 # Set --build-arg INSTALL_TORCH=0 to skip Torch entirely.
 RUN if [ "$INSTALL_TORCH" = "1" ]; then \
       python3 -m pip install --no-cache-dir \
-        torch==2.8.0+cpu torchvision==0.23.0+cpu torchaudio==2.8.0+cpu \
+        torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 \
         --index-url https://download.pytorch.org/whl/cpu; \
     fi
 

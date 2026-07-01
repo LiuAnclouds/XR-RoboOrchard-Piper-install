@@ -1,4 +1,4 @@
-# XR HoloBrain Piper Install
+# XR RoboOrchard Piper Install
 
 ## 1. Clone
 
@@ -6,7 +6,7 @@
 mkdir -p ~/SOP
 cd ~/SOP
 
-git clone https://github.com/LiuAnclouds/XR-HoloBrain-Piper-install.git deploy
+git clone https://github.com/LiuAnclouds/XR-RoboOrchard-Piper-install.git deploy
 cd deploy
 ```
 
