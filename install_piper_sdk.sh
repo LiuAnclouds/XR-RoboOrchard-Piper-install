@@ -28,7 +28,11 @@ rm -rf /tmp/piper_assets/piper_ros /tmp/piper_assets/piper_ros_zip
 if ! git clone --depth 1 "$PIPER_ROS_REPO" /tmp/piper_assets/piper_ros; then
   echo "git clone piper_ros failed, trying GitHub zip..."
   mkdir -p /tmp/piper_assets/piper_ros_zip
-  wget -O /tmp/piper_assets/piper_ros.zip "$PIPER_ROS_ZIP_URL"
+  if command -v curl >/dev/null 2>&1; then
+    curl -L --retry 3 -o /tmp/piper_assets/piper_ros.zip "$PIPER_ROS_ZIP_URL"
+  else
+    wget -O /tmp/piper_assets/piper_ros.zip "$PIPER_ROS_ZIP_URL"
+  fi
   python - <<'PY'
 from pathlib import Path
 import zipfile
