@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 set -u
 
 DOCKER_NAME=${DOCKER_NAME:-holobrain}
@@ -263,3 +263,5 @@ else
   echo "Some environment checks failed. Fix the [FAIL] sections above."
   exit 1
 fi
+
+
